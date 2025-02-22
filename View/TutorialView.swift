@@ -31,7 +31,7 @@ struct TutorialView: View {
                 .tag(5)
         }
         .tabViewStyle(.page)
-        PageControlRepresentable(currentPage: $currentPage, numberOfPages: 5)
+        PageControlRepresentable(currentPage: $currentPage, numberOfPages: 6)
             .padding(.bottom, 10)
     }
     

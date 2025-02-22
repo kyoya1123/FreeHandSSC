@@ -15,6 +15,8 @@ struct DrawView: View {
     @EnvironmentObject var viewModel: ViewModel
     @Environment(\.dismiss) private var dismiss
     
+    @State var isShowingTrashConfirmAlert: Bool = false
+    
     var body: some View {
         ZStack {
             CanvasView(viewModel: viewModel)
@@ -60,8 +62,7 @@ struct DrawView: View {
             
             HStack {
                 Button {
-                    SoundEffect.play(.trash)
-                    viewModel.newPage()
+                    isShowingTrashConfirmAlert = true
                 } label: {
                     Image("trashIcon")
                         .resizable()
@@ -139,6 +140,14 @@ struct DrawView: View {
         }
         .sheet(isPresented: $viewModel.isShowingTutorial) {
             TutorialView()
+        }
+        .alert("Trash This Page?", isPresented: $isShowingTrashConfirmAlert) {
+            Button("Cancel", role: .cancel) {}
+            Button("Trash", role: .destructive) {
+                SwiftDataManager.shared.delete(data: viewModel.paper)
+                SoundEffect.play(.trash)
+                viewModel.newPage()
+            }
         }
         .statusBar(hidden: true)
         .persistentSystemOverlays(.hidden)
