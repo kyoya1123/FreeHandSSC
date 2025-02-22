@@ -39,6 +39,7 @@ struct DrawView: View {
                 HStack {
                     Spacer()
                     Button {
+                        viewModel.save()
                         viewModel.newPage()
                         SoundEffect.play(.curl)
                     } label: {
@@ -54,7 +55,7 @@ struct DrawView: View {
                                         endPoint: .bottomTrailing
                                     )
                                 )
-                                .frame(width: 40, height: 40)
+                                .frame(width: 50, height: 50)
                                 .shadow(color: .gray, radius: 20)
                     }
                 }
@@ -161,15 +162,4 @@ struct DrawView: View {
     viewModel.position = .init(x: 100, y: 100)
     return DrawView()
         .environmentObject(viewModel)
-}
-
-struct Triangle: Shape {
-    func path(in rect: CGRect) -> Path {
-        Path { path in
-            path.move(to: CGPoint(x: rect.midX, y: rect.minY))
-            path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY))
-            path.addLine(to: CGPoint(x: rect.minX, y: rect.maxY))
-            path.closeSubpath()
-        }
-    }
 }

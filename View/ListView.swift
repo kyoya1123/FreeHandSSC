@@ -48,10 +48,26 @@ struct ListView: View {
                                 }
                             }
                             .matchedTransitionSource(id: paper.id, in: namespace)
+                            .contextMenu {
+                                if let imageData = paper.imageData, let image = UIImage(data: imageData) {
+                                    ShareLink(item: ShareableImage(image: image),
+                                              preview: SharePreview("画像を共有", image: Image(uiImage: image))) {
+                                        Label("Share", systemImage: "square.and.arrow.up")
+                                    }
+                                }
+                                Section {
+                                    Button(role: .destructive) {
+                                        SwiftDataManager.shared.delete(data: paper)
+                                        viewModel.papers = SwiftDataManager.shared.loadAllData()
+                                    } label: {
+                                        Label("Delete", systemImage: "trash")
+                                    }
+                                }
+                            }
                     }
                 }
                 .padding()
-                .searchable(text: $viewModel.searchText)
+                .searchable(text: $viewModel.searchText, prompt: "Search by text")
             }
             .navigationTitle(Text("Pages"))
             .toolbar {
