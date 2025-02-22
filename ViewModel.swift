@@ -27,6 +27,14 @@ class ViewModel: NSObject, ObservableObject {
         super.init()
         updateTool()
         papers = SwiftDataManager.shared.loadAllData()
+        SoundEffect.play(.open)
+        if let lastPage = filteredAndSortedPapers.first {
+            paper = lastPage
+        } else {
+            newPage()
+        }
+        
+        isShowingDrawView = true
     }
     
     var initialDegree: Double?
@@ -92,6 +100,13 @@ class ViewModel: NSObject, ObservableObject {
         SwiftDataManager.shared.update(data: paper, drawing: canvasView.drawing, canvasImage: canvasView.asImage()!)
     }
     
+    func newPage() {
+        let new = Paper(drawing: PKDrawing())
+        SwiftDataManager.shared.add(data: new)
+        paper = new
+        canvasView.drawing = .init()
+        papers = SwiftDataManager.shared.loadAllData()
+    }
 }
 
 extension UIView {

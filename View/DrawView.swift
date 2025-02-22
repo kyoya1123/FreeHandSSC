@@ -37,13 +37,8 @@ struct DrawView: View {
                 HStack {
                     Spacer()
                     Button {
-                        let new = Paper(drawing: PKDrawing())
-                        SwiftDataManager.shared.add(data: new)
+                        viewModel.newPage()
                         SoundEffect.play(.curl)
-                        withAnimation {
-                            viewModel.canvasView.drawing = .init()
-                            viewModel.paper = new
-                        }
                     } label: {
                         UnevenRoundedRectangle(cornerRadii: .init(topLeading: 10))
                                 .fill(
@@ -65,14 +60,8 @@ struct DrawView: View {
             
             HStack {
                 Button {
-                    SwiftDataManager.shared.delete(data: viewModel.paper)
-                    let new = Paper(drawing: PKDrawing())
-                    SwiftDataManager.shared.add(data: new)
                     SoundEffect.play(.trash)
-                    withAnimation {
-                        viewModel.canvasView.drawing = .init()
-                        viewModel.paper = new
-                    }
+                    viewModel.newPage()
                 } label: {
                     Image("trashIcon")
                         .resizable()
@@ -143,6 +132,7 @@ struct DrawView: View {
         }
         .onDisappear {
             viewModel.save()
+            viewModel.papers = SwiftDataManager.shared.loadAllData()
         }
         .statusBar(hidden: true)
         .persistentSystemOverlays(.hidden)

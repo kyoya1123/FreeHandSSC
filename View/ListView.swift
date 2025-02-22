@@ -21,6 +21,7 @@ struct ListView: View {
                             Button {
                                 SoundEffect.play(.open)
                                 viewModel.paper = paper
+                                viewModel.canvasView.drawing = try! PKDrawing(data: viewModel.paper.drawingData)
                                 viewModel.isShowingDrawView = true
                             } label: {
                                 VStack {
@@ -56,9 +57,7 @@ struct ListView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("", systemImage: "square.and.pencil") {
-                        let new = Paper(drawing: PKDrawing())
-                        SwiftDataManager.shared.add(data: new)
-                        viewModel.paper = new
+                        viewModel.newPage()
                         viewModel.isShowingDrawView = true
                     }
                 }
@@ -67,9 +66,6 @@ struct ListView: View {
                 DrawView()
                     .navigationTransition(.zoom(sourceID: viewModel.paper.id, in: namespace))
                     .environmentObject(viewModel)
-                    .onDisappear {
-                        viewModel.papers = SwiftDataManager.shared.loadAllData()
-                    }
             }
     }
 }
