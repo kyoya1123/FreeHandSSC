@@ -22,6 +22,7 @@ class ViewModel: NSObject, ObservableObject {
     @Published var paper: Paper = Paper(drawing: PKDrawing())
     @Published var isShowingDrawView = false
     @Published var searchText: String = ""
+    @Published var isShowingTutorial = false
     
     override init() {
         super.init()

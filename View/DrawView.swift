@@ -129,10 +129,16 @@ struct DrawView: View {
         }
         .onAppear {
             viewModel.canvasView.drawing = try! PKDrawing(data: viewModel.paper.drawingData)
+            if viewModel.papers.count == 1 {
+                viewModel.isShowingTutorial = true
+            }
         }
         .onDisappear {
             viewModel.save()
             viewModel.papers = SwiftDataManager.shared.loadAllData()
+        }
+        .sheet(isPresented: $viewModel.isShowingTutorial) {
+            TutorialView()
         }
         .statusBar(hidden: true)
         .persistentSystemOverlays(.hidden)
