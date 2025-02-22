@@ -41,8 +41,7 @@ public class SwiftDataManager {
     func update(data: DataItem, drawing: PKDrawing, canvasImage: UIImage) {
         Task { @MainActor in
             data.drawingData = drawing.dataRepresentation()
-            //        let image = drawing.image(from: CGRect(origin: .zero, size: UIScreen.main.bounds.size), scale: 1)
-            data.imageData = canvasImage.jpegData(compressionQuality: 0.8)
+            data.imageData = drawing.strokes.isEmpty ? nil :  canvasImage.jpegData(compressionQuality: 0.8)
             data.recognizedText = await TextExtractor.extractText(from: canvasImage)
             try? modelContext.save()
         }

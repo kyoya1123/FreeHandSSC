@@ -88,6 +88,9 @@ class ViewModel: NSObject, ObservableObject {
         updateTool()
     }
     
+    func save() {
+        SwiftDataManager.shared.update(data: paper, drawing: canvasView.drawing, canvasImage: canvasView.asImage()!)
+    }
     
 }
 
@@ -120,6 +123,6 @@ extension ViewModel: PKCanvasViewDelegate, UIPencilInteractionDelegate {
     }
     
     func canvasViewDidEndUsingTool(_ canvasView: PKCanvasView) {
-        SwiftDataManager.shared.update(data: paper, drawing: canvasView.drawing, canvasImage: canvasView.asImage()!)
+        save()
     }
 }

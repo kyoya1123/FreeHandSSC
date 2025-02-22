@@ -15,8 +15,6 @@ struct DrawView: View {
     @EnvironmentObject var viewModel: ViewModel
     @Environment(\.dismiss) private var dismiss
     
-    var audioPlayer = try! AVAudioPlayer(data: NSDataAsset(name: "pageCurl")!.data)
-    
     var body: some View {
         ZStack {
             CanvasView(viewModel: viewModel)
@@ -41,7 +39,7 @@ struct DrawView: View {
                     Button {
                         let new = Paper(drawing: PKDrawing())
                         SwiftDataManager.shared.add(data: new)
-                        audioPlayer.play()
+                        SoundEffect.play(.curl)
                         withAnimation {
                             viewModel.canvasView.drawing = .init()
                             viewModel.paper = new
@@ -67,12 +65,34 @@ struct DrawView: View {
             
             HStack {
                 Button {
+                    SwiftDataManager.shared.delete(data: viewModel.paper)
+                    let new = Paper(drawing: PKDrawing())
+                    SwiftDataManager.shared.add(data: new)
+                    SoundEffect.play(.trash)
+                    withAnimation {
+                        viewModel.canvasView.drawing = .init()
+                        viewModel.paper = new
+                    }
+                } label: {
+                    Image("trashIcon")
+                        .resizable()
+                        .padding(5)
+                        .foregroundStyle(.black)
+                        .background(Color("toolBackground"))
+                        .frame(width: 44, height: 44)
+                        .clipShape(.circle)
+                    
+                }
+                Button {
+                    SoundEffect.play(.close)
                     dismiss()
                 } label: {
-                    Image(systemName: "xmark.circle.fill")
-                        .resizable()
+                    Image(systemName: "book.pages.fill")
+                        .padding()
+                        .foregroundStyle(.black)
+                        .background(Color("toolBackground"))
                         .frame(width: 44, height: 44)
-                        .foregroundStyle(.gray, .gray.tertiary)
+                        .clipShape(.circle)
                     
                 }
                 CompactSlider(value: $viewModel.penWidth, in: 2...16, scaleVisibility: .hidden, minHeight: 50, enableDragGestureDelayForiOS: false) {
@@ -121,6 +141,9 @@ struct DrawView: View {
         .onAppear {
             viewModel.canvasView.drawing = try! PKDrawing(data: viewModel.paper.drawingData)
         }
+        .onDisappear {
+            viewModel.save()
+        }
         .statusBar(hidden: true)
         .persistentSystemOverlays(.hidden)
         .navigationBarBackButtonHidden()
@@ -130,7 +153,7 @@ struct DrawView: View {
 
 #Preview {
     var viewModel = ViewModel()
-    viewModel.position = .init(x: -100, y: -100)
+    viewModel.position = .init(x: 100, y: 100)
     return DrawView()
         .environmentObject(viewModel)
 }

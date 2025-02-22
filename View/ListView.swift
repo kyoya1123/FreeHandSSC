@@ -19,6 +19,7 @@ struct ListView: View {
                 LazyVGrid(columns: Array(repeating: GridItem(), count: 4), spacing: 20) {
                     ForEach(viewModel.filteredAndSortedPapers) { paper in
                             Button {
+                                SoundEffect.play(.open)
                                 viewModel.paper = paper
                                 viewModel.isShowingDrawView = true
                             } label: {
@@ -33,6 +34,9 @@ struct ListView: View {
                                         } else {
                                             Rectangle()
                                                 .foregroundStyle(Color("Paper"))
+                                                .clipShape(RoundedRectangle(cornerRadius: 10))
+                                                .shadow(color: .black.opacity(0.3), radius: 5)
+                                                .padding()
                                         }
                                     Text(paper.createdAt.displayFormat)
                                         .foregroundStyle(.black)
@@ -48,7 +52,7 @@ struct ListView: View {
                 .padding()
                 .searchable(text: $viewModel.searchText)
             }
-            .navigationTitle(Text("Papers"))
+            .navigationTitle(Text("Pages"))
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("", systemImage: "square.and.pencil") {
