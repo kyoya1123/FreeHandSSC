@@ -34,11 +34,7 @@ struct CanvasView: UIViewRepresentable {
         viewModel.canvasView.drawingPolicy = .pencilOnly
         viewModel.canvasView.delegate = viewModel
         viewModel.canvasView.backgroundColor = UIColor(named: "Paper")
-//        let imageView = UIImageView(frame: UIScreen.main.bounds)
-//        imageView.frame.origin = .zero
-//        imageView.image = UIImage(named: "paperTexture")
-//        imageView.contentMode = .scaleAspectFit
-//        viewModel.canvasView.addSubview(imageView)
+        viewModel.canvasView.disableMenuInteractions()
         viewModel.canvasView.onTouchBegan = { touch in
             let azimuth = touch.azimuthAngle(in: viewModel.canvasView)
             let degrees = azimuth * 180 / .pi + 180
@@ -48,4 +44,20 @@ struct CanvasView: UIViewRepresentable {
     }
 
     func updateUIView(_ uiView: TouchHandlablePKCanvasView, context: Context) {}
+}
+
+extension PKCanvasView {
+    func disableMenuInteractions() {
+        for view in [self] + subviewsRecursive {
+            for interaction in view.interactions where interaction is UIEditMenuInteraction {
+                view.removeInteraction(interaction)
+            }
+        }
+    }
+}
+
+extension UIView {
+    var subviewsRecursive: [UIView] {
+        subviews + subviews.flatMap { $0.subviewsRecursive }
+    }
 }

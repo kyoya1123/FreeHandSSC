@@ -98,8 +98,8 @@ struct DrawView: View {
                 Button {
                     viewModel.toggleTool()
                 } label: {
-//                    Image(systemName: viewModel.isEraser ? "eraser" : "pencil")
-                    Image(systemName: viewModel.isEraser ? "circle.slash.fill" : "circle.fill")
+                    Image(systemName: "circle")
+                        .symbolVariant(viewModel.isEraser ? .fill.slash : .fill)
                         .padding()
                         .foregroundStyle(.black)
                         .background(Color("toolBackground"))
