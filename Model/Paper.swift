@@ -8,9 +8,10 @@ class Paper: Identifiable {
     var createdAt: Date = Date()
     var drawingData: Data
     @Attribute(.externalStorage) var imageData: Data?
+    var recognizedText: String = ""
     
     init(drawing: PKDrawing) {
         self.drawingData = drawing.dataRepresentation()
-        self.imageData = drawing.image(from: CGRect(origin: .zero, size: UIScreen.main.bounds.size), scale: UIScreen.main.scale).jpegData(compressionQuality: 0.8)
+        self.imageData = drawing.image(from: CGRect(origin: .zero, size: UIScreen.main.bounds.size), scale: 1).jpegData(compressionQuality: 0.8)
     }
 }

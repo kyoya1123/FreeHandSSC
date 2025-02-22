@@ -8,6 +8,7 @@ struct FreeHandApp: App {
                 ListView()
                     .environmentObject(ViewModel())
             }
+            .preferredColorScheme(.light)
         }
     }
 }

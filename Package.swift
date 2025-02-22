@@ -41,7 +41,10 @@ let package = Package(
             dependencies: [
                 .product(name: "CompactSlider", package: "compactslider")
             ],
-            path: "."
+            path: ".",
+            resources: [
+                .process("Resources")
+            ]
         )
     ],
     swiftLanguageVersions: [.v5]

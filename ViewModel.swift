@@ -21,6 +21,7 @@ class ViewModel: NSObject, ObservableObject {
     @Published var papers: [Paper] = []
     @Published var paper: Paper = Paper(drawing: PKDrawing())
     @Published var isShowingDrawView = false
+    @Published var searchText: String = ""
     
     override init() {
         super.init()
@@ -29,6 +30,14 @@ class ViewModel: NSObject, ObservableObject {
     }
     
     var initialDegree: Double?
+    
+    var filteredAndSortedPapers: [Paper] {
+        var filtered = papers
+        if !searchText.isEmpty {
+            filtered = filtered.filter({ $0.recognizedText.lowercased().contains(searchText.lowercased()) })
+        }
+        return filtered.sorted(by: { $0.createdAt > $1.createdAt })
+    }
     
     func updateSelectedCell(degrees: Double) {
         let screenWidth = UIScreen.main.bounds.width
@@ -67,7 +76,11 @@ class ViewModel: NSObject, ObservableObject {
     }
     
     func updateTool() {
-        canvasView.tool = PKInkingTool(inkType, color: UIColor(penColor), width: penWidth)
+        if isEraser {
+            canvasView.tool = PKEraserTool(.bitmap, width: penWidth)
+        } else {
+            canvasView.tool = PKInkingTool(inkType, color: UIColor(penColor), width: penWidth)
+        }
     }
     
     func toggleTool() {
@@ -78,7 +91,26 @@ class ViewModel: NSObject, ObservableObject {
         }
         isEraser.toggle()
     }
+    
+    
 }
+
+extension UIView {
+    func asImage() -> UIImage? {
+        UIGraphicsImageRenderer(bounds: bounds).image { _ in
+            drawHierarchy(in: bounds, afterScreenUpdates: true)
+        }
+    }
+}
+
+extension Date {
+    var displayFormat: String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy/MM/dd HH:mm"
+        return dateFormatter.string(from: self)
+    }
+}
+
 
 extension ViewModel: PKCanvasViewDelegate, UIPencilInteractionDelegate {
     func pencilInteraction(_ interaction: UIPencilInteraction,
@@ -92,6 +124,6 @@ extension ViewModel: PKCanvasViewDelegate, UIPencilInteractionDelegate {
     }
     
     func canvasViewDidEndUsingTool(_ canvasView: PKCanvasView) {
-        SwiftDataManager.shared.update(data: paper, drawing: canvasView.drawing)
+        SwiftDataManager.shared.update(data: paper, drawing: canvasView.drawing, canvasImage: canvasView.asImage()!)
     }
 }

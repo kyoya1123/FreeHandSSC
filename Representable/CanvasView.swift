@@ -33,7 +33,12 @@ struct CanvasView: UIViewRepresentable {
     func makeUIView(context: Context) -> TouchHandlablePKCanvasView {
         viewModel.canvasView.drawingPolicy = .pencilOnly
         viewModel.canvasView.delegate = viewModel
-        viewModel.canvasView.backgroundColor = .clear
+        viewModel.canvasView.backgroundColor = UIColor(named: "Paper")
+//        let imageView = UIImageView(frame: UIScreen.main.bounds)
+//        imageView.frame.origin = .zero
+//        imageView.image = UIImage(named: "paperTexture")
+//        imageView.contentMode = .scaleAspectFit
+//        viewModel.canvasView.addSubview(imageView)
         viewModel.canvasView.onTouchBegan = { touch in
             let azimuth = touch.azimuthAngle(in: viewModel.canvasView)
             let degrees = azimuth * 180 / .pi + 180
