@@ -1,0 +1,62 @@
+//
+//  SwiftDataHandler.swift
+//  SwiftDataSample
+//
+//  Created by Yuki Kuwashima on 2024/07/31.
+//
+
+import SwiftData
+import PencilKit
+
+public class SwiftDataManager {
+    
+    typealias DataItem = Paper
+    
+    public static let shared = SwiftDataManager()
+    
+    public var sharedModelContainer: ModelContainer = {
+        let schema = Schema([
+            DataItem.self,
+        ])
+        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
+        
+        do {
+            let container = try ModelContainer(for: schema, configurations: [modelConfiguration])
+            return container
+        } catch {
+            fatalError("Could not create ModelContainer: \(error)")
+        }
+    }()
+    
+    public var modelContext: ModelContext
+    
+    init() {
+        modelContext = ModelContext(sharedModelContainer)
+    }
+    
+    func add(data: DataItem) {
+        modelContext.insert(data)
+    }
+    
+    func update(data: DataItem, drawing: PKDrawing) {
+        data.drawingData = drawing.dataRepresentation()
+        data.imageData = drawing.image(from: CGRect(origin: .zero, size: UIScreen.main.bounds.size), scale: UIScreen.main.scale).jpegData(compressionQuality: 0.8)
+        try? modelContext.save()
+    }
+    
+    func delete(data: DataItem) {
+        modelContext.delete(data)
+    }
+    
+    func loadAllData() -> [DataItem] {
+        let fetchDesc = FetchDescriptor<DataItem>(
+            predicate: nil,
+            sortBy: []
+        )
+        guard let fetchedDatas = try? modelContext.fetch(fetchDesc) else {
+            print("Error on fetch data using SwiftData")
+            return []
+        }
+        return fetchedDatas
+    }
+}

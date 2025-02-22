@@ -8,37 +8,41 @@ import PackageDescription
 import AppleProductTypes
 
 let package = Package(
-    name: "FreeHandSSC",
+    name: "FreeHand",
     platforms: [
-        .iOS("16.0")
+        .iOS("18.0")
     ],
     products: [
         .iOSApplication(
-            name: "FreeHandSSC",
+            name: "FreeHand",
             targets: ["AppModule"],
             bundleIdentifier: "com.kyoya.FreeHandSSC",
             teamIdentifier: "3X7LEN654Y",
             displayVersion: "1.0",
             bundleVersion: "1",
-            appIcon: .placeholder(icon: .calendar),
+            appIcon: .placeholder(icon: .paper),
             accentColor: .presetColor(.indigo),
             supportedDeviceFamilies: [
-                .pad,
-                .phone
+                .pad
             ],
             supportedInterfaceOrientations: [
-                .portrait,
                 .landscapeRight,
-                .landscapeLeft,
-                .portraitUpsideDown(.when(deviceFamilies: [.pad]))
-            ]
+                .landscapeLeft
+            ],
+            appCategory: .utilities
         )
+    ],
+    dependencies: [
+        .package(url: "https://github.com/buh/CompactSlider", "2.0.6"..<"3.0.0")
     ],
     targets: [
         .executableTarget(
             name: "AppModule",
+            dependencies: [
+                .product(name: "CompactSlider", package: "compactslider")
+            ],
             path: "."
         )
     ],
-    swiftLanguageVersions: [.v6]
+    swiftLanguageVersions: [.v5]
 )
