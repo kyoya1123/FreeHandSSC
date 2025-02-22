@@ -17,17 +17,14 @@ struct DrawView: View {
         ZStack {
             CanvasView(viewModel: viewModel)
             HStack {
-                CompactSlider(value: $viewModel.penWidth, in: 2...16)
-                    .compactSliderScale(visibility: .hidden)
-                    .compactSliderOptionsByRemoving(.delayedGesture)
-                    .frame(width: 200, height: 50)
-                    .compactSliderBackground { configuration,padding in
-                        Image(systemName: "circle.fill")
-                            .font(.system(size: 10))
-                        Spacer()
-                        Image(systemName: "circle.fill")
-                            .font(.system(size: 20))
-                    }
+                CompactSlider(value: $viewModel.penWidth, in: 2...16, scaleVisibility: .hidden, minHeight: 50, enableDragGestureDelayForiOS: false) {
+                    Image(systemName: "circle.fill")
+                        .font(.system(size: 10))
+                    Spacer()
+                    Image(systemName: "circle.fill")
+                        .font(.system(size: 20))
+                }
+                .frame(width: 200)
                 .onChange(of: viewModel.penWidth) {
                     viewModel.updateTool()
                 }
@@ -68,5 +65,8 @@ struct DrawView: View {
 }
 
 #Preview {
-    DrawView()
+    var viewModel = ViewModel()
+    viewModel.position = .init(x: 100, y: 100)
+    return DrawView()
+        .environmentObject(viewModel)
 }

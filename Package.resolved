@@ -1,13 +1,13 @@
 {
-  "originHash" : "4e93bbe0c46d12a6a9628005a8f09b6d02196020381edde6ac2d0e3d0740ee89",
+  "originHash" : "89ba6f99090cf2f5af74df7a9c70a327dbc3b60ccb506a7bbec0eb9a69e0d162",
   "pins" : [
     {
       "identity" : "compactslider",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/buh/CompactSlider",
       "state" : {
-        "revision" : "5a535419efaa00bcffc0f5994ee372f458f82883",
-        "version" : "2.0.6"
+        "revision" : "abe4d1df6f0c85dcb133266cc07c2a5d08295726",
+        "version" : "1.1.6"
       }
     }
   ],

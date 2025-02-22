@@ -33,7 +33,7 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(url: "https://github.com/buh/CompactSlider", "2.0.6"..<"3.0.0")
+        .package(url: "https://github.com/buh/CompactSlider", .exact("1.1.6"))
     ],
     targets: [
         .executableTarget(
