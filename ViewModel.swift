@@ -84,12 +84,8 @@ class ViewModel: NSObject, ObservableObject {
     }
     
     func toggleTool() {
-        if isEraser {
-            updateTool()
-        } else {
-            canvasView.tool = PKEraserTool(.bitmap, width: penWidth)
-        }
         isEraser.toggle()
+        updateTool()
     }
     
     

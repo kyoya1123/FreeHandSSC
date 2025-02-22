@@ -82,6 +82,10 @@ struct DrawView: View {
                     Image(systemName: "circle.fill")
                         .font(.system(size: 20))
                 }
+                .background {
+                    Color("Paper")
+                        .clipShape(RoundedRectangle(cornerRadius: 7))
+                }
                 .frame(width: 200)
                 .onChange(of: viewModel.penWidth) {
                     viewModel.updateTool()
@@ -94,10 +98,11 @@ struct DrawView: View {
                 Button {
                     viewModel.toggleTool()
                 } label: {
-                    Image(systemName: viewModel.isEraser ? "eraser" : "pencil")
+//                    Image(systemName: viewModel.isEraser ? "eraser" : "pencil")
+                    Image(systemName: viewModel.isEraser ? "circle.slash.fill" : "circle.fill")
                         .padding()
                         .foregroundStyle(.black)
-                        .background(.ultraThinMaterial)
+                        .background(Color("toolBackground"))
                         .frame(width: 44, height: 44)
                         .clipShape(.circle)
                 }
