@@ -131,8 +131,15 @@ class ViewModel: NSObject, ObservableObject {
     }
     
     @objc func swipeUp() {
-        SoundEffect.play(.curl)
-        newPage()
+        if let nextPage = nextPage() {
+            SoundEffect.play(.curl)
+            paper = nextPage
+            canvasView.drawing = try! PKDrawing(data: paper.drawingData)
+        } else {
+            if canvasView.drawing.strokes.isEmpty { return }
+            SoundEffect.play(.curl)
+            newPage()
+        }
     }
     
     @objc func swipeDown() {
@@ -161,6 +168,11 @@ class ViewModel: NSObject, ObservableObject {
     func previousPage() -> Paper? {
         guard let index = papers.firstIndex(of: paper), index > 0 else { return nil }
         return papers[index - 1]
+    }
+    
+    func nextPage() -> Paper? {
+        guard let index = papers.firstIndex(of: paper), index < papers.count - 1 else { return nil }
+        return papers[index + 1]
     }
 }
 
