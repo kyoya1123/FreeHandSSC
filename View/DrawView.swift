@@ -5,7 +5,6 @@
 //  Created by Kyoya Yamaguchi on 2024/11/24.
 //
 
-import CompactSlider
 import PencilKit
 import SwiftUI
 import AVFAudio

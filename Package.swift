@@ -32,15 +32,9 @@ let package = Package(
             appCategory: .utilities
         )
     ],
-    dependencies: [
-        .package(url: "https://github.com/buh/CompactSlider", .exact("1.1.6"))
-    ],
     targets: [
         .executableTarget(
             name: "AppModule",
-            dependencies: [
-                .product(name: "CompactSlider", package: "compactslider")
-            ],
             path: ".",
             resources: [
                 .process("Resources")
