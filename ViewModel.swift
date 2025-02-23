@@ -24,7 +24,6 @@ class ViewModel: NSObject, ObservableObject {
     @Published var searchText: String = ""
     @Published var isShowingTutorial = false
     @Published var isShowingTrashConfirmAlert = false
-    @Published var pageCurlOnRight = false
     
     override init() {
         super.init()
@@ -76,12 +75,10 @@ class ViewModel: NSObject, ObservableObject {
         let padding: CGFloat = 45
         switch degrees {
         case 0..<45, 315..<360: // Right
-            pageCurlOnRight = true
             animateTool(rotation: 90, position: .init(x: screenWidth - padding, y: screenHeight / 2))
         case 45..<135: // Bottom
             animateTool(rotation: 0, position: .init(x: screenWidth / 2, y: screenHeight - padding))
         case 135..<225: // Left
-            pageCurlOnRight = false
             animateTool(rotation: 270, position: .init(x: padding, y: screenHeight / 2))
         case 225..<315: // Top
             animateTool(rotation: 0, position: .init(x: screenWidth / 2, y: padding))

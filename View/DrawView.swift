@@ -41,15 +41,13 @@ struct DrawView: View {
             VStack {
                 Spacer()
                 HStack {
-                    if viewModel.pageCurlOnRight {
-                        Spacer()
-                    }
+                    Spacer()
                     Button {
                         viewModel.save()
                         viewModel.newPage()
                         SoundEffect.play(.curl)
                     } label: {
-                        UnevenRoundedRectangle(cornerRadii: .init(topLeading: viewModel.pageCurlOnRight ? 10 : 0, topTrailing: viewModel.pageCurlOnRight ? 0 : 10))
+                        UnevenRoundedRectangle(cornerRadii: .init(topLeading: 10))
                                 .fill(
                                     LinearGradient(
                                         gradient: Gradient(stops: [
@@ -57,15 +55,12 @@ struct DrawView: View {
                                             .init(color: .gray, location: 0.5),
                                             .init(color: Color("Paper"), location: 1.0)
                                         ]),
-                                        startPoint: viewModel.pageCurlOnRight ? .topLeading : .topTrailing,
-                                        endPoint: viewModel.pageCurlOnRight ? .bottomTrailing : .bottomLeading
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
                                     )
                                 )
                                 .frame(width: 50, height: 50)
                                 .shadow(color: .gray, radius: 20)
-                    }
-                    if !viewModel.pageCurlOnRight {
-                        Spacer()
                     }
                 }
             }
