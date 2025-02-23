@@ -17,34 +17,6 @@ struct ListView: View {
     var body: some View {
             ScrollView {
                 LazyVGrid(columns: Array(repeating: GridItem(), count: 4), spacing: 20) {
-                    VStack {
-                        Button {
-                            SoundEffect.play(.curl)
-                            viewModel.newPage()
-                            viewModel.isShowingDrawView = true
-                        } label: {
-                            Rectangle()
-                                .foregroundStyle(Color(.systemGroupedBackground))
-                                .clipShape(RoundedRectangle(cornerRadius: 10))
-                                .shadow(color: .black.opacity(0.3), radius: 5)
-                                .overlay {
-                                    Image(systemName: "plus.circle.fill")
-                                        .resizable()
-                                        .frame(width: 44, height: 44)
-                                        .foregroundStyle(.white, Color.accentColor)
-                                }
-                                .padding()
-                        }
-                        Group {
-                            Text("New Page")
-                                .foregroundStyle(.black)
-                            Text("---")
-                                .foregroundStyle(.black.tertiary)
-                                .font(.caption)
-                                .lineLimit(1)
-                                .opacity(0)
-                        }
-                    }
                     ForEach(viewModel.filteredAndSortedPapers) { paper in
                             Button {
                                 SoundEffect.play(.open)
@@ -92,6 +64,35 @@ struct ListView: View {
                                     }
                                 }
                             }
+                    }
+                    VStack {
+                        Button {
+                            if viewModel.canvasView.drawing.strokes.isEmpty { return }
+                            SoundEffect.play(.curl)
+                            viewModel.newPage()
+                            viewModel.isShowingDrawView = true
+                        } label: {
+                            Rectangle()
+                                .foregroundStyle(Color(.systemGroupedBackground))
+                                .clipShape(RoundedRectangle(cornerRadius: 10))
+                                .shadow(color: .black.opacity(0.3), radius: 5)
+                                .overlay {
+                                    Image(systemName: "plus.circle.fill")
+                                        .resizable()
+                                        .frame(width: 44, height: 44)
+                                        .foregroundStyle(.white, Color.accentColor)
+                                }
+                                .padding()
+                        }
+                        Group {
+                            Text("New Page")
+                                .foregroundStyle(.black)
+                            Text("---")
+                                .foregroundStyle(.black.tertiary)
+                                .font(.caption)
+                                .lineLimit(1)
+                                .opacity(0)
+                        }
                     }
                 }
                 .padding()

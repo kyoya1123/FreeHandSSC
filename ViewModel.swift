@@ -15,7 +15,7 @@ class ViewModel: NSObject, ObservableObject {
     @Published var penColor: Color = .black
     @Published var penWidth: Double = 5
     @Published var rotation: Double = 270
-    @Published var position: CGPoint = .init(x: UIScreen.main.bounds.width - 45, y: UIScreen.main.bounds.height / 2)
+    @Published var position: CGPoint = .init(x: 45, y: UIScreen.main.bounds.height / 2)
     @Published var isEraser = false
     
     @Published var papers: [Paper] = []
@@ -24,6 +24,7 @@ class ViewModel: NSObject, ObservableObject {
     @Published var searchText: String = ""
     @Published var isShowingTutorial = false
     @Published var isShowingTrashConfirmAlert = false
+    @Published var pageCurlOnRight = false
     
     override init() {
         super.init()
@@ -66,42 +67,33 @@ class ViewModel: NSObject, ObservableObject {
         if !searchText.isEmpty {
             filtered = filtered.filter({ $0.recognizedText.lowercased().contains(searchText.lowercased()) })
         }
-        return filtered.sorted(by: { $0.createdAt > $1.createdAt })
+        return filtered.sorted(by: { $0.createdAt < $1.createdAt })
     }
     
     func updateSelectedCell(degrees: Double) {
         let screenWidth = UIScreen.main.bounds.width
         let screenHeight = UIScreen.main.bounds.height
         let padding: CGFloat = 45
+        switch degrees {
+        case 0..<45, 315..<360: // Right
+            pageCurlOnRight = true
+            animateTool(rotation: 90, position: .init(x: screenWidth - padding, y: screenHeight / 2))
+        case 45..<135: // Bottom
+            animateTool(rotation: 0, position: .init(x: screenWidth / 2, y: screenHeight - padding))
+        case 135..<225: // Left
+            pageCurlOnRight = false
+            animateTool(rotation: 270, position: .init(x: padding, y: screenHeight / 2))
+        case 225..<315: // Top
+            animateTool(rotation: 0, position: .init(x: screenWidth / 2, y: padding))
+        default:
+            break
+        }
+    }
+    
+    func animateTool(rotation: Double, position: CGPoint) {
         withAnimation {
-            switch degrees {
-            case 0..<22.5, 337.5..<360: //middle Trailing
-                rotation = 270
-                position = .init(x: screenWidth - padding, y: screenHeight / 2)
-            case 22.5..<67.5: //bottomTrailing
-                rotation = 315
-                position = .init(x: screenWidth - padding * 3, y: screenHeight - padding * 3)
-            case 67.5..<112.5: //bottomCenter
-                rotation = 360
-                position = .init(x: screenWidth / 2, y: screenHeight - padding)
-            case 112.5..<157.5: //bottomLeading
-                rotation = 45
-                position = .init(x: padding * 3, y: screenHeight - padding * 3)
-            case 157.5..<202.5: //middleLeading
-                rotation = 90
-                position = .init(x: padding, y: screenHeight / 2)
-            case 202.5..<247.5: //topLeading
-                rotation = 135
-                position = .init(x: padding * 3, y: padding * 3)
-            case 247.5..<292.5: //topCenter
-                rotation = 180
-                position = .init(x: screenWidth / 2, y: padding)
-            case 292.5..<337.5: //topTrailing
-                rotation = 225
-                position = .init(x: screenWidth - padding * 3, y: padding * 3)
-            default:
-                break
-            }
+            self.rotation = rotation
+            self.position = position
         }
     }
     
@@ -151,17 +143,9 @@ class ViewModel: NSObject, ObservableObject {
         }
     }
     
-    private var hasExecutedAction = false
-    
     @objc private func handlePinch(_ gesture: UIPinchGestureRecognizer) {
-        print(gesture.scale, gesture.velocity)
-        if gesture.state == .changed, gesture.scale < 0.9, gesture.numberOfTouches == 3, !hasExecutedAction {
+        if gesture.state == .changed, gesture.scale < 1, gesture.numberOfTouches == 2 {
             isShowingTrashConfirmAlert = true
-            hasExecutedAction = true
-        }
-        
-        if gesture.state == .ended {
-            hasExecutedAction = false
         }
     }
     

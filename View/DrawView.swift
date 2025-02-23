@@ -17,31 +17,39 @@ struct DrawView: View {
     var body: some View {
         ZStack {
             CanvasView(viewModel: viewModel)
-            HStack(spacing: 50) {
-                ForEach(0..<(Int(UIScreen.main.bounds.width) / 100), id: \.self) { _ in
-                    VStack(spacing: -24) {
-                        UnevenRoundedRectangle(cornerRadii: .init(bottomLeading: 20, bottomTrailing: 20))
-                            .foregroundStyle(.gray)
-                            .frame(width: 30, height: 40)
-                            .shadow(radius: 10)
-                        Circle()
-                            .foregroundStyle(.black)
-                            .frame(width: 40, height: 40)
-                            .zIndex(-1)
-                        Spacer()
+            VStack {
+                Button {
+                    dismiss()
+                } label: {
+                    HStack(spacing: 50) {
+                        ForEach(0..<(Int(UIScreen.main.bounds.width) / 100), id: \.self) { _ in
+                            VStack(spacing: -24) {
+                                UnevenRoundedRectangle(cornerRadii: .init(bottomLeading: 20, bottomTrailing: 20))
+                                    .foregroundStyle(.gray)
+                                    .frame(width: 30, height: 40)
+                                    .shadow(radius: 10)
+                                Circle()
+                                    .foregroundStyle(.black)
+                                    .frame(width: 40, height: 40)
+                                    .zIndex(-1)
+                            }
+                        }
                     }
                 }
+                Spacer()
             }
             VStack {
                 Spacer()
                 HStack {
-                    Spacer()
+                    if viewModel.pageCurlOnRight {
+                        Spacer()
+                    }
                     Button {
                         viewModel.save()
                         viewModel.newPage()
                         SoundEffect.play(.curl)
                     } label: {
-                        UnevenRoundedRectangle(cornerRadii: .init(topLeading: 10))
+                        UnevenRoundedRectangle(cornerRadii: .init(topLeading: viewModel.pageCurlOnRight ? 10 : 0, topTrailing: viewModel.pageCurlOnRight ? 0 : 10))
                                 .fill(
                                     LinearGradient(
                                         gradient: Gradient(stops: [
@@ -49,12 +57,15 @@ struct DrawView: View {
                                             .init(color: .gray, location: 0.5),
                                             .init(color: Color("Paper"), location: 1.0)
                                         ]),
-                                        startPoint: .topLeading,
-                                        endPoint: .bottomTrailing
+                                        startPoint: viewModel.pageCurlOnRight ? .topLeading : .topTrailing,
+                                        endPoint: viewModel.pageCurlOnRight ? .bottomTrailing : .bottomLeading
                                     )
                                 )
                                 .frame(width: 50, height: 50)
                                 .shadow(color: .gray, radius: 20)
+                    }
+                    if !viewModel.pageCurlOnRight {
+                        Spacer()
                     }
                 }
             }
@@ -82,9 +93,10 @@ struct DrawView: View {
                         .background(Color("toolBackground"))
                         .frame(width: 44, height: 44)
                         .clipShape(.circle)
+                        .rotationEffect(.degrees(90))
                     
                 }
-                CompactSlider(value: $viewModel.penWidth, in: 2...16, scaleVisibility: .hidden, minHeight: 50, enableDragGestureDelayForiOS: false) {
+                CompactSlider(value: $viewModel.penWidth, in: 2...16, scaleVisibility: .hidden, minHeight: 45, enableDragGestureDelayForiOS: false) {
                     Image(systemName: "circle.fill")
                         .font(.system(size: 10))
                     Spacer()
