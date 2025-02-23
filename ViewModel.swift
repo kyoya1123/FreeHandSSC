@@ -23,6 +23,7 @@ class ViewModel: NSObject, ObservableObject {
     @Published var isShowingDrawView = false
     @Published var searchText: String = ""
     @Published var isShowingTutorial = false
+    @Published var isShowingTrashConfirmAlert = false
     
     override init() {
         super.init()
@@ -36,6 +37,26 @@ class ViewModel: NSObject, ObservableObject {
         }
         
         isShowingDrawView = true
+        
+        let pinch = UIPinchGestureRecognizer(
+            target: self,
+            action: #selector(handlePinch)
+        )
+        canvasView.addGestureRecognizer(pinch)
+        
+        let swipeUpGesture = UISwipeGestureRecognizer(
+            target: self,
+            action: #selector(swipeUp)
+        )
+        swipeUpGesture.direction = .up
+        canvasView.addGestureRecognizer(swipeUpGesture)
+        
+        let swipeDownGesture = UISwipeGestureRecognizer(
+            target: self,
+            action: #selector(swipeDown)
+        )
+        swipeDownGesture.direction = .down
+        canvasView.addGestureRecognizer(swipeDownGesture)
     }
     
     var initialDegree: Double?
@@ -107,6 +128,39 @@ class ViewModel: NSObject, ObservableObject {
         paper = new
         canvasView.drawing = .init()
         papers = SwiftDataManager.shared.loadAllData()
+    }
+    
+    @objc func swipeUp() {
+        SoundEffect.play(.curl)
+        newPage()
+    }
+    
+    @objc func swipeDown() {
+        if let previousPage = previousPage() {
+            save()
+            SoundEffect.play(.curl)
+            paper = previousPage
+            canvasView.drawing = try! PKDrawing(data: paper.drawingData)
+        }
+    }
+    
+    private var hasExecutedAction = false
+    
+    @objc private func handlePinch(_ gesture: UIPinchGestureRecognizer) {
+        print(gesture.scale, gesture.velocity)
+        if gesture.state == .changed, gesture.scale < 0.9, gesture.numberOfTouches == 3, !hasExecutedAction {
+            isShowingTrashConfirmAlert = true
+            hasExecutedAction = true
+        }
+        
+        if gesture.state == .ended {
+            hasExecutedAction = false
+        }
+    }
+    
+    func previousPage() -> Paper? {
+        guard let index = papers.firstIndex(of: paper), index > 0 else { return nil }
+        return papers[index - 1]
     }
 }
 

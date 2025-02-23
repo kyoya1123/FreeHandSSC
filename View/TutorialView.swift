@@ -80,7 +80,7 @@ struct TutorialView: View {
     var tools: some View {
         VStack {
             Image("") //解説画像
-            
+            //gestureについても
         }
     }
     

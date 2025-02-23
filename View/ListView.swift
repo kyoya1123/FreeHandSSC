@@ -73,6 +73,7 @@ struct ListView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("", systemImage: "square.and.pencil") {
+                        SoundEffect.play(.curl)
                         viewModel.newPage()
                         viewModel.isShowingDrawView = true
                     }
