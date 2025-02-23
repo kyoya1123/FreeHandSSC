@@ -75,13 +75,25 @@ class ViewModel: NSObject, ObservableObject {
         let padding: CGFloat = 45
         switch degrees {
         case 0..<45, 315..<360: // Right
-            animateTool(rotation: 90, position: .init(x: screenWidth - padding, y: screenHeight / 2))
+            animateTool(
+                rotation: 90,
+                position: .init(x: screenWidth - padding, y: screenHeight / 2)
+            )
         case 45..<135: // Bottom
-            animateTool(rotation: 0, position: .init(x: screenWidth / 2, y: screenHeight - padding))
+            animateTool(
+                rotation: 0,
+                position: .init(x: screenWidth / 2, y: screenHeight - padding)
+            )
         case 135..<225: // Left
-            animateTool(rotation: 270, position: .init(x: padding, y: screenHeight / 2))
+            animateTool(
+                rotation: -90,
+                position: .init(x: padding, y: screenHeight / 2)
+            )
         case 225..<315: // Top
-            animateTool(rotation: 0, position: .init(x: screenWidth / 2, y: padding))
+            animateTool(
+                rotation: 0,
+                position: .init(x: screenWidth / 2, y: padding)
+            )
         default:
             break
         }
