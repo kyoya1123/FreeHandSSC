@@ -107,11 +107,19 @@ struct ListView: View {
                         viewModel.isShowingDrawView = true
                     }
                 }
+                ToolbarItem(placement: .topBarLeading) {
+                    Button("", systemImage: "questionmark.circle") {
+                        viewModel.isShowingTutorial = true
+                    }
+                }
             }
             .navigationDestination(isPresented: $viewModel.isShowingDrawView) {
                 DrawView()
                     .navigationTransition(.zoom(sourceID: viewModel.paper.id, in: namespace))
                     .environmentObject(viewModel)
+            }
+            .sheet(isPresented: $viewModel.isShowingTutorial) {
+                TutorialView()
             }
     }
 }

@@ -159,13 +159,13 @@ class ViewModel: NSObject, ObservableObject {
     }
     
     func previousPage() -> Paper? {
-        guard let index = papers.firstIndex(of: paper), index > 0 else { return nil }
-        return papers[index - 1]
+        guard let index = filteredAndSortedPapers.firstIndex(of: paper), index > 0 else { return nil }
+        return filteredAndSortedPapers[index - 1]
     }
     
     func nextPage() -> Paper? {
-        guard let index = papers.firstIndex(of: paper), index < papers.count - 1 else { return nil }
-        return papers[index + 1]
+        guard let index = filteredAndSortedPapers.firstIndex(of: paper), index < papers.count - 1 else { return nil }
+        return filteredAndSortedPapers[index + 1]
     }
 }
 

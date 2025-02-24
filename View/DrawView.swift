@@ -123,6 +123,7 @@ struct DrawView: View {
                         .clipShape(.circle)
                 }
             }
+            .background(Color.white.opacity(0.01))
             .rotationEffect(.degrees(viewModel.rotation))
             .position(x: viewModel.position.x, y: viewModel.position.y)
         }
@@ -136,7 +137,7 @@ struct DrawView: View {
         }
         .onAppear {
             viewModel.canvasView.drawing = try! PKDrawing(data: viewModel.paper.drawingData)
-            if viewModel.papers.count == 1 {
+            if viewModel.papers.count == 1, viewModel.canvasView.drawing.strokes.isEmpty {
                 viewModel.isShowingTutorial = true
             }
         }
