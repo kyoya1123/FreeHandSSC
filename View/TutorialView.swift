@@ -11,7 +11,9 @@ import AVKit
 struct TutorialView: View {
     
     @Environment(\.dismiss) private var dismiss
-    @State var player = AVPlayer(url: Bundle.main.url(forResource: "instruction", withExtension: "mp4")!)
+    @State var notePlayer = AVPlayer(url: Bundle.main.url(forResource: "note", withExtension: "mp4")!)
+    @State var sketchPlayer = AVPlayer(url: Bundle.main.url(forResource: "sketch", withExtension: "mp4")!)
+    @State var collabPlayer = AVPlayer(url: Bundle.main.url(forResource: "collab", withExtension: "mp4")!)
     
     @State var currentPage: Int = 0
     
@@ -80,15 +82,18 @@ struct TutorialView: View {
     
     var writing: some View {
         VStack {
-            VideoPlayer(player: player)
-                .aspectRatio(1280 / 896, contentMode: .fit)
+            VideoPlayer(player: notePlayer)
+                .aspectRatio(4 / 3, contentMode: .fit)
                 .onAppear {
-                    player.play()
+                    notePlayer.play()
                 }
                 .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
                 .padding([.top, .horizontal], 20)
             Spacer()
             Text("In this app, you can start writing just as you would on paper, using any hand, from any direction.")
+                .font(.title2)
+                .multilineTextAlignment(.center)
+            Text("Left-handed? No more struggle with tool placement")
                 .font(.title2)
                 .multilineTextAlignment(.center)
             Spacer()
@@ -98,17 +103,22 @@ struct TutorialView: View {
     
     var drawing: some View {
         VStack {
-            VideoPlayer(player: player)
-                .aspectRatio(1280 / 896, contentMode: .fit)
+            VideoPlayer(player: sketchPlayer)
+                .aspectRatio(4 / 3, contentMode: .fit)
                 .onAppear {
-                    player.play()
+                    sketchPlayer.play()
                 }
                 .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
                 .padding([.top, .horizontal], 20)
             Spacer()
-            Text("Sketch on your iPad by rotating it—just like you would on paper.")
-                .font(.title2)
-                .multilineTextAlignment(.center)
+            VStack(spacing: 16) {
+                Text("Sketch on your iPad by rotating it—just like you would on paper.")
+                    .font(.title2)
+                    .multilineTextAlignment(.center)
+                Text("No matter what angle you use it from, the tools adjusts automatically.")
+                    .font(.title2)
+                    .multilineTextAlignment(.center)
+            }
             Spacer()
         }
         .padding([.top, .horizontal])
@@ -116,16 +126,21 @@ struct TutorialView: View {
     
     var collaborate: some View {
         VStack {
-            VideoPlayer(player: player)
-                .aspectRatio(1280 / 896, contentMode: .fit)
+            VideoPlayer(player: collabPlayer)
+                .aspectRatio(4 / 3, contentMode: .fit)
                 .onAppear {
-                    player.play()
+                    collabPlayer.play()
                 }
                 .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
                 .padding([.top, .horizontal], 20)
             Spacer()
-            Text("Ideal for face-to-face discussions.")
-                .font(.title2)
+            VStack(spacing: 16) {
+                Text("Ideal for face-to-face discussions.")
+                    .font(.title2)
+                Text("Bring the experience of gathering around paper to iPad.")
+                    .font(.title2)
+                    .multilineTextAlignment(.center)
+            }
             Spacer()
         }
         .padding()
@@ -154,12 +169,12 @@ struct TutorialView: View {
     
     var pages: some View {
         VStack(spacing: 16) {
-            Image("gesture")
+            Image("pages")
                 .resizable()
                 .scaledToFit()
             VStack {
-                Text("View your pages list digitally")
-                Text("Your notes are automatically recognized and searchable.")
+                Text("View your pages list digitally.")
+                Text("Your handwrites are automatically recognized and searchable.")
                     .multilineTextAlignment(.center)
             }
             .font(.title2)
