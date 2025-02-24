@@ -90,12 +90,14 @@ struct TutorialView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
                 .padding([.top, .horizontal], 20)
             Spacer()
-            Text("In this app, you can start writing just as you would on paper, using any hand, from any direction.")
-                .font(.title2)
-                .multilineTextAlignment(.center)
-            Text("Left-handed? No more struggle with tool placement")
-                .font(.title2)
-                .multilineTextAlignment(.center)
+            VStack(spacing: 16) {
+                Text("In this app, you can start writing just as you would on paper, using any hand, from any direction.")
+                    .font(.title2)
+                    .multilineTextAlignment(.center)
+                Text("Left-handed? No more struggle with tool placement")
+                    .font(.title2)
+                    .multilineTextAlignment(.center)
+            }
             Spacer()
         }
         .padding([.top, .horizontal])
@@ -112,7 +114,7 @@ struct TutorialView: View {
                 .padding([.top, .horizontal], 20)
             Spacer()
             VStack(spacing: 16) {
-                Text("Sketch on your iPad by rotating it—just like you would on paper.")
+                Text("Sketch on your iPad by rotating, or holding it.")
                     .font(.title2)
                     .multilineTextAlignment(.center)
                 Text("No matter what angle you use it from, the tools adjusts automatically.")
@@ -172,9 +174,9 @@ struct TutorialView: View {
             Image("pages")
                 .resizable()
                 .scaledToFit()
-            VStack {
+            VStack(spacing: 16) {
                 Text("View your pages list digitally.")
-                Text("Your handwrites are automatically recognized and searchable.")
+                Text("Your handwrites are automatically recognized and searchable from the search bar.")
                     .multilineTextAlignment(.center)
             }
             .font(.title2)
